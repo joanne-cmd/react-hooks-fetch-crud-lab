@@ -8,7 +8,7 @@ function QuestionForm(props) {
     answer3: "",
     answer4: "",
     correctIndex: 0,
-  });
+  }); 
 
   function handleChange(event) {
     setFormData({
@@ -19,8 +19,40 @@ function QuestionForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
+   
+    fetch ("http://localhost:4000/questions",{
+      method:"POST",
+      headers :{
+        "Content-Type":"application/json"},
+      body:JSON.stringify({
+          prompt: formData.prompt,
+          answers:[ formData.answer1, formData.answer2, formData.answer3 ,formData.answer4],
+          correctIndex: parseInt(formData.correctIndex)
+    }),
+    })
+    // .then((r)=>r.JSON())
+    //  .then((data)=> console.log(data) ) 
   }
+ 
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   fetch("http://localhost:4000/questions", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       prompt: formData.prompt,
+  //       answers: [
+  //         formData.answer1,
+  //         formData.answer2,
+  //         formData.answer3,
+  //         formData.answer4,
+  //       ],
+  //       correctIndex: parseInt(formData.correctIndex),
+  //     }),
+  //   });
+  
 
   return (
     <section>
@@ -84,7 +116,7 @@ function QuestionForm(props) {
             <option value="3">{formData.answer4}</option>
           </select>
         </label>
-        <button type="submit">Add Question</button>
+        <button type="submit" onClick={handleSubmit}>Add Question</button>
       </form>
     </section>
   );
